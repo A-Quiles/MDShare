@@ -32,11 +32,45 @@
       <button class="boton boton--primario" (click)="alternarPanelCompartir()">
         Compartir
       </button>
+      <button
+        class="boton boton--peligro"
+        title="Eliminar este documento"
+        (click)="abrirModalEliminar()"
+      >
+        🗑
+      </button>
     }
 
     <app-boton-tema />
   </div>
 </header>
+
+@if (modalEliminarAbierto()) {
+  <div class="modal-fondo" (click)="cerrarModalEliminar()"></div>
+  <div class="modal">
+    <h2>Eliminar documento</h2>
+    <p>
+      ¿Estás seguro de que quieres eliminar <strong>{{ titulo() }}</strong>?
+      Esta acción no se puede deshacer.
+    </p>
+    <div class="modal__acciones">
+      <button
+        class="boton boton--secundario"
+        (click)="cerrarModalEliminar()"
+        [disabled]="eliminando()"
+      >
+        Cancelar
+      </button>
+      <button
+        class="boton boton--peligro"
+        (click)="confirmarEliminacion()"
+        [disabled]="eliminando()"
+      >
+        {{ eliminando() ? 'Eliminando…' : 'Eliminar para siempre' }}
+      </button>
+    </div>
+  </div>
+}
 
 @if (esPropietario() && panelCompartirAbierto()) {
   <section class="compartir">

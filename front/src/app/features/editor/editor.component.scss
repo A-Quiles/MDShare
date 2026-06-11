@@ -235,6 +235,51 @@
   }
 }
 
+.modal-fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  background: rgb(0 0 0 / 0.35);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  max-width: 420px;
+  width: 90vw;
+  padding: 1.75rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  box-shadow: var(--sombra);
+
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 0.75rem;
+
+    .boton {
+      flex: 1;
+    }
+  }
+}
+
 @media (max-width: 800px) {
   .editor {
     grid-template-columns: 1fr;

@@ -154,6 +154,15 @@ input {
       background: rgb(255 255 255 / 0.16);
     }
   }
+
+  &--peligro {
+    background: var(--peligro);
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+    }
+  }
 }
 
 /* Scrollbars discretos acordes al tema */

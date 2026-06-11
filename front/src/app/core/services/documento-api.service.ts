@@ -45,4 +45,9 @@ export class DocumentoApiService {
       `${this.baseUrl}/${documentoId}/colaboradores/${encodeURIComponent(email)}`,
     );
   }
+
+  /** Solo el propietario puede borrar el documento. */
+  eliminarDocumento(documentoId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${documentoId}`);
+  }
 }

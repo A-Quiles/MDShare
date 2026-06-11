@@ -61,6 +61,12 @@ public class DocumentoService {
     }
 
     @Transactional
+    public void eliminarDocumento(UUID documentoId, UsuarioActual usuario) {
+        Documento documento = buscarComoPropietario(documentoId, usuario);
+        documentoRepository.delete(documento);
+    }
+
+    @Transactional
     public ColaboradorResponse invitarColaborador(UUID documentoId, String email, UsuarioActual usuario) {
         Documento documento = buscarComoPropietario(documentoId, usuario);
         String emailNormalizado = email.trim().toLowerCase(Locale.ROOT);

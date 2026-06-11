@@ -82,4 +82,12 @@ public class DocumentoController {
                                     @RequestHeader("X-Usuario-Email") String email) {
         documentoService.eliminarColaborador(id, emailColaborador, new UsuarioActual(usuarioId, email));
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminarDocumento(@PathVariable UUID id,
+                                  @RequestHeader("X-Usuario-Id") UUID usuarioId,
+                                  @RequestHeader("X-Usuario-Email") String email) {
+        documentoService.eliminarDocumento(id, new UsuarioActual(usuarioId, email));
+    }
 }

@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 
 import { CambioDocumento } from '../../core/models/cambio-documento.model';
@@ -51,6 +51,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   private static readonly RETARDO_DEBOUNCE_MS = 150;
 
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly supabase = inject(SupabaseService);
   private readonly documentoApi = inject(DocumentoApiService);
@@ -65,7 +66,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   protected readonly cargando = signal(true);
   protected readonly error = signal<string | null>(null);
 
-  // Estado del panel "Compartir" (solo visible para el propietario).
   protected readonly esPropietario = signal(false);
   protected readonly panelCompartirAbierto = signal(false);
   protected readonly colaboradores = signal<Colaborador[]>([]);
@@ -75,12 +75,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     validators: [Validators.required, Validators.email],
   });
 
+  protected readonly menuDescargasAbierto = signal(false);
+  protected readonly copiado = signal(false);
+
+  protected readonly modalEliminarAbierto = signal(false);
+  protected readonly eliminando = signal(false);
+
   private documentoId = '';
-  /**
-   * Identidad del emisor en el canal. El sufijo aleatorio distingue dos
-   * pestañas del mismo usuario, de modo que el filtro de eco no bloquee
-   * la colaboracion entre ellas.
-   */
   private usuarioSocket = '';
   private posicionCursor = 0;
 
@@ -92,8 +93,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.usuarioSocket = `${email}#${Math.random().toString(36).slice(2, 8)}`;
 
     this.cargarDocumento();
-
-    // El id del documento actua como codigo de sala.
     this.socket.conectar(this.documentoId);
 
     // Flujo local -> red: debounce para no saturar el canal de WebSockets.
@@ -157,10 +156,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Estado de las acciones de exportacion.
-  protected readonly menuDescargasAbierto = signal(false);
-  protected readonly copiado = signal(false);
-
   protected async copiarMarkdown(): Promise<void> {
     const exito = await this.exportacion.copiar(this.contenido());
     this.copiado.set(exito);
@@ -220,6 +215,26 @@ export class EditorComponent implements OnInit, OnDestroy {
       next: () =>
         this.colaboradores.update((lista) => lista.filter((c) => c.email !== email)),
       error: () => this.errorCompartir.set('No se pudo quitar al colaborador.'),
+    });
+  }
+
+  protected abrirModalEliminar(): void {
+    this.modalEliminarAbierto.set(true);
+  }
+
+  protected cerrarModalEliminar(): void {
+    this.modalEliminarAbierto.set(false);
+  }
+
+  protected async confirmarEliminacion(): Promise<void> {
+    this.eliminando.set(true);
+    this.documentoApi.eliminarDocumento(this.documentoId).subscribe({
+      next: () => this.router.navigate(['/']),
+      error: () => {
+        this.error.set('No se pudo eliminar el documento.');
+        this.eliminando.set(false);
+        this.modalEliminarAbierto.set(false);
+      },
     });
   }
 
