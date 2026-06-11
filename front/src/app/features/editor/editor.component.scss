@@ -1,0 +1,243 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--cabecera-fondo);
+  color: var(--cabecera-texto);
+
+  &__izquierda {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+
+    h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--cabecera-texto);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__volver {
+    color: var(--primario-suave-texto);
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__derecha {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+}
+
+.descargas {
+  position: relative;
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    z-index: 20;
+    min-width: 185px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+
+    button {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--texto);
+      font-size: 0.85rem;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--superficie-2);
+        color: var(--texto-titulo);
+      }
+    }
+  }
+}
+
+.compartir {
+  padding: 1rem 1.5rem;
+  background: var(--superficie-2);
+  border-bottom: 1px solid var(--borde);
+
+  h3 {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  &__ayuda {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+  }
+
+  &__formulario {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 420px;
+
+    input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      font-size: 0.9rem;
+
+      &:focus {
+        outline: 2px solid var(--primario);
+        border-color: transparent;
+      }
+    }
+  }
+
+  &__error {
+    margin: 0.4rem 0 0;
+    font-size: 0.8rem;
+    color: var(--peligro);
+  }
+
+  &__vacio {
+    margin: 0.75rem 0 0;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+  }
+
+  &__lista {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.4rem 0.3rem 0.75rem;
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+  }
+
+  &__quitar {
+    border: none;
+    background: transparent;
+    color: var(--texto-suave);
+    cursor: pointer;
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0.2rem;
+
+    &:hover {
+      color: var(--peligro);
+    }
+  }
+}
+
+.estado {
+  font-size: 0.8rem;
+  white-space: nowrap;
+
+  &--conectado {
+    color: var(--exito);
+  }
+
+  &--desconectado {
+    color: var(--advertencia);
+  }
+}
+
+.mensaje {
+  padding: 2rem;
+  color: var(--texto-suave);
+
+  &--error {
+    color: var(--peligro);
+  }
+}
+
+.editor {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--borde);
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--superficie);
+
+    h2 {
+      margin: 0;
+      padding: 0.55rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--texto-suave);
+      border-bottom: 1px solid var(--borde);
+    }
+
+    textarea {
+      flex: 1;
+      border: none;
+      resize: none;
+      padding: 1.1rem 1.25rem;
+      background: var(--superficie);
+      color: var(--texto);
+      font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    app-markdown-preview {
+      flex: 1;
+      overflow-y: auto;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .editor {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

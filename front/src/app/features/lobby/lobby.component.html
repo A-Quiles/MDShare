@@ -1,0 +1,52 @@
+<header class="cabecera">
+  <h1>MDShare</h1>
+  <div class="cabecera__usuario">
+    <span>{{ supabase.emailUsuario }}</span>
+    <button class="boton boton--cabecera" (click)="cerrarSesion()">Cerrar sesión</button>
+    <app-boton-tema />
+  </div>
+</header>
+
+<main class="lobby">
+  <section class="lobby__nuevo">
+    <h2>Nuevo documento</h2>
+    <form (submit)="$event.preventDefault(); crearDocumento()">
+      <input
+        type="text"
+        [formControl]="tituloNuevo"
+        placeholder="Título del documento…"
+        maxlength="255"
+      />
+      <button type="submit" class="boton boton--primario">Crear y abrir sala</button>
+    </form>
+  </section>
+
+  <section class="lobby__lista">
+    <h2>Documentos</h2>
+
+    @if (cargando()) {
+      <p class="lobby__estado">Cargando documentos…</p>
+    } @else if (error()) {
+      <p class="lobby__estado lobby__estado--error">{{ error() }}</p>
+      <button class="boton boton--secundario" (click)="cargarDocumentos()">Reintentar</button>
+    } @else if (documentos().length === 0) {
+      <p class="lobby__estado">Aún no hay documentos. Crea el primero.</p>
+    } @else {
+      <ul>
+        @for (documento of documentos(); track documento.id) {
+          <li>
+            <a [routerLink]="['/editor', documento.id]">
+              <span class="titulo">
+                {{ documento.titulo }}
+                @if (esCompartidoConmigo(documento.creadoPor)) {
+                  <span class="insignia">Compartido contigo</span>
+                }
+              </span>
+              <span class="fecha">{{ documento.actualizadoEn | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</main>

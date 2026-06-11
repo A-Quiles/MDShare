@@ -1,0 +1,97 @@
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(1100px 500px at 85% -10%, rgb(37 99 235 / 0.25), transparent),
+    radial-gradient(900px 450px at -10% 110%, rgb(37 99 235 / 0.18), transparent),
+    var(--fondo);
+
+  &__tema {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  &__tarjeta {
+    width: min(390px, 90vw);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 2.25rem 2rem;
+    box-shadow: var(--sombra);
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  &__subtitulo {
+    margin: 0.25rem 0 1.5rem;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--texto-titulo);
+    margin-top: 0.6rem;
+  }
+
+  input {
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 0.95rem;
+
+    &:focus {
+      outline: 2px solid var(--primario);
+      border-color: transparent;
+    }
+
+    &.invalido {
+      border-color: var(--peligro);
+
+      &:focus {
+        outline-color: var(--peligro);
+      }
+    }
+  }
+
+  &__validacion {
+    color: var(--peligro);
+    font-size: 0.78rem;
+    margin: 0.15rem 0 0;
+  }
+
+  &__error {
+    color: var(--peligro);
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0;
+  }
+
+  &__aviso {
+    color: var(--exito);
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0;
+  }
+
+  &__acciones {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.4rem;
+
+    .boton {
+      flex: 1;
+    }
+  }
+}

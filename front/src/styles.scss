@@ -1,0 +1,163 @@
+/* ============================================================
+   MDShare - estilos globales y tokens de diseno
+   El tema activo lo fija TemaService via el atributo data-tema
+   en <html>; aqui se definen ambas paletas.
+   ============================================================ */
+
+:root {
+  /* Paleta clara (por defecto) */
+  --fondo: #f4f6fb;
+  --superficie: #ffffff;
+  --superficie-2: #eef2f7;
+  --borde: #e2e8f0;
+
+  --texto: #334155;
+  --texto-suave: #64748b;
+  --texto-titulo: #0f172a;
+
+  --primario: #2563eb;
+  --primario-hover: #1d4ed8;
+  --primario-suave: #dbeafe;
+  --primario-suave-texto: #1d4ed8;
+
+  --exito: #15803d;
+  --advertencia: #b45309;
+  --peligro: #dc2626;
+
+  --cabecera-fondo: #0f172a;
+  --cabecera-texto: #f8fafc;
+  --cabecera-texto-suave: #94a3b8;
+
+  --codigo-fondo: #0f172a;
+  --codigo-texto: #e2e8f0;
+
+  --sombra: 0 12px 32px rgb(2 6 23 / 0.09);
+  --sombra-suave: 0 4px 14px rgb(2 6 23 / 0.06);
+}
+
+[data-tema='oscuro'] {
+  --fondo: #0b1120;
+  --superficie: #131c31;
+  --superficie-2: #0f172a;
+  --borde: #24304a;
+
+  --texto: #c2cce0;
+  --texto-suave: #8294b3;
+  --texto-titulo: #f1f5f9;
+
+  --primario: #3b82f6;
+  --primario-hover: #60a5fa;
+  --primario-suave: #1e3a8a;
+  --primario-suave-texto: #93c5fd;
+
+  --exito: #4ade80;
+  --advertencia: #fbbf24;
+  --peligro: #f87171;
+
+  --cabecera-fondo: #060b16;
+  --cabecera-texto: #e2e8f0;
+  --cabecera-texto-suave: #7c8aa5;
+
+  --codigo-fondo: #060b16;
+  --codigo-texto: #cbd5e1;
+
+  --sombra: 0 12px 32px rgb(0 0 0 / 0.55);
+  --sombra-suave: 0 4px 14px rgb(0 0 0 / 0.4);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+
+  &[data-tema='oscuro'] {
+    color-scheme: dark;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--texto-titulo);
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input {
+  background: var(--superficie);
+  color: var(--texto);
+}
+
+/* Botones compartidos por todas las pantallas */
+.boton {
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--primario {
+    background: var(--primario);
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background: var(--primario-hover);
+    }
+  }
+
+  &--secundario {
+    background: var(--superficie-2);
+    color: var(--texto-titulo);
+    border: 1px solid var(--borde);
+
+    &:hover:not(:disabled) {
+      border-color: var(--primario);
+    }
+  }
+
+  /* Boton compacto para cabeceras oscuras */
+  &--cabecera {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--cabecera-texto);
+    border: 1px solid rgb(255 255 255 / 0.14);
+
+    &:hover:not(:disabled) {
+      background: rgb(255 255 255 / 0.16);
+    }
+  }
+}
+
+/* Scrollbars discretos acordes al tema */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--borde) transparent;
+}

@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: collab-editor-backend
+
+  datasource:
+    # Conexion a la base de datos PostgreSQL de Supabase.
+    # Usa la cadena del "Session pooler" (compatible IPv4) que aparece en:
+    # Supabase Dashboard > Project Settings > Database > Connection string.
+    # El usuario del pooler tiene el formato: postgres.<PROJECT_REF>
+    url: ${SUPABASE_DB_URL:jdbc:postgresql://aws-0-eu-west-1.pooler.supabase.com:5432/postgres}
+    username: ${SUPABASE_DB_USER:postgres.TU_PROJECT_REF}
+    password: ${SUPABASE_DB_PASSWORD:TU_PASSWORD_DE_BBDD}
+    hikari:
+      maximum-pool-size: 5
+
+  jpa:
+    # El esquema lo crea supabase/schema.sql desde el SQL Editor de Supabase;
+    # Hibernate solo valida que entidades y tablas coincidan.
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+app:
+  cors:
+    # Origenes permitidos para la API REST y el handshake SockJS (separados por coma).
+    allowed-origins: ${APP_ALLOWED_ORIGINS:http://localhost:4200}
+  sync:
+    # Cada cuanto persiste el scheduler en Supabase el estado en memoria de los documentos.
+    persist-interval-ms: 5000
+
+logging:
+  level:
+    com.mdshare.editor: DEBUG

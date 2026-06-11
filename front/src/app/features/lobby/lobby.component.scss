@@ -1,0 +1,126 @@
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  background: var(--cabecera-fondo);
+  color: var(--cabecera-texto);
+
+  h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--cabecera-texto);
+    letter-spacing: 0.01em;
+  }
+
+  &__usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--cabecera-texto-suave);
+  }
+}
+
+.lobby {
+  max-width: 720px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  h2 {
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    letter-spacing: 0.01em;
+  }
+
+  &__nuevo {
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--sombra-suave);
+
+    form {
+      display: flex;
+      gap: 0.75rem;
+
+      input {
+        flex: 1;
+        padding: 0.6rem 0.85rem;
+        border: 1px solid var(--borde);
+        border-radius: 8px;
+        font-size: 0.95rem;
+
+        &:focus {
+          outline: 2px solid var(--primario);
+          border-color: transparent;
+        }
+      }
+    }
+  }
+
+  &__estado {
+    color: var(--texto-suave);
+
+    &--error {
+      color: var(--peligro);
+    }
+  }
+
+  &__lista {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+
+      &:hover {
+        border-color: var(--primario);
+        box-shadow: var(--sombra-suave);
+        transform: translateY(-1px);
+      }
+
+      .titulo {
+        font-weight: 600;
+        color: var(--texto-titulo);
+      }
+
+      .insignia {
+        margin-left: 0.5rem;
+        padding: 0.15rem 0.55rem;
+        border-radius: 999px;
+        background: var(--primario-suave);
+        color: var(--primario-suave-texto);
+        font-size: 0.7rem;
+        font-weight: 600;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
+
+      .fecha {
+        font-size: 0.8rem;
+        color: var(--texto-suave);
+        white-space: nowrap;
+      }
+    }
+  }
+}

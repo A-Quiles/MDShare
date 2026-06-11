@@ -1,0 +1,107 @@
+<header class="cabecera">
+  <div class="cabecera__izquierda">
+    <a routerLink="/" class="cabecera__volver">← Documentos</a>
+    <h1>{{ titulo() || 'Documento' }}</h1>
+  </div>
+
+  <div class="cabecera__derecha">
+    @if (socket.conectado$ | async) {
+      <span class="estado estado--conectado">● Tiempo real activo</span>
+    } @else {
+      <span class="estado estado--desconectado">● Reconectando…</span>
+    }
+
+    <button class="boton boton--cabecera" (click)="copiarMarkdown()">
+      {{ copiado() ? '✓ Copiado' : 'Copiar' }}
+    </button>
+
+    <div class="descargas">
+      <button class="boton boton--cabecera" (click)="alternarMenuDescargas()">
+        Descargar ▾
+      </button>
+      @if (menuDescargasAbierto()) {
+        <div class="descargas__menu">
+          <button type="button" (click)="descargarMarkdown()">Markdown (.md)</button>
+          <button type="button" (click)="descargarHtml()">Página web (.html)</button>
+          <button type="button" (click)="exportarPdf()">PDF (imprimir)</button>
+        </div>
+      }
+    </div>
+
+    @if (esPropietario()) {
+      <button class="boton boton--primario" (click)="alternarPanelCompartir()">
+        Compartir
+      </button>
+    }
+
+    <app-boton-tema />
+  </div>
+</header>
+
+@if (esPropietario() && panelCompartirAbierto()) {
+  <section class="compartir">
+    <h3>Colaboradores</h3>
+    <p class="compartir__ayuda">
+      Este documento es privado. Solo tú y las personas invitadas podéis verlo y editarlo.
+    </p>
+
+    <form class="compartir__formulario" (submit)="$event.preventDefault(); invitar()">
+      <input
+        type="email"
+        [formControl]="emailInvitar"
+        placeholder="email@delcolaborador.com"
+      />
+      <button type="submit" class="boton boton--primario">Invitar</button>
+    </form>
+    @if (emailInvitar.touched && emailInvitar.invalid) {
+      <p class="compartir__error">Introduce un email con formato válido.</p>
+    }
+    @if (errorCompartir()) {
+      <p class="compartir__error">{{ errorCompartir() }}</p>
+    }
+
+    @if (colaboradores().length === 0) {
+      <p class="compartir__vacio">Aún no has invitado a nadie.</p>
+    } @else {
+      <ul class="compartir__lista">
+        @for (colaborador of colaboradores(); track colaborador.email) {
+          <li>
+            <span>{{ colaborador.email }}</span>
+            <button
+              type="button"
+              class="compartir__quitar"
+              title="Quitar acceso"
+              (click)="quitarColaborador(colaborador.email)"
+            >
+              ✕
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}
+
+@if (cargando()) {
+  <p class="mensaje">Cargando documento…</p>
+} @else if (error()) {
+  <p class="mensaje mensaje--error">{{ error() }}</p>
+} @else {
+  <main class="editor">
+    <section class="editor__panel">
+      <h2>Markdown</h2>
+      <textarea
+        #areaTexto
+        [value]="contenido()"
+        (input)="alEscribir($event)"
+        spellcheck="false"
+        placeholder="Escribe en Markdown… los cambios se sincronizan en vivo."
+      ></textarea>
+    </section>
+
+    <section class="editor__panel">
+      <h2>Previsualización</h2>
+      <app-markdown-preview [markdown]="contenido()" />
+    </section>
+  </main>
+}
