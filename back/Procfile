@@ -1,0 +1,1 @@
+web: java -jar target/collab-editor-backend-0.0.1-SNAPSHOT.jar
