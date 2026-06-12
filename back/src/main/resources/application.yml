@@ -29,7 +29,8 @@ server:
 app:
   cors:
     # Origenes permitidos para la API REST y el handshake SockJS (separados por coma).
-    allowed-origins: ${APP_ALLOWED_ORIGINS:http://localhost:4200}
+    # La variable APP_ALLOWED_ORIGINS permite sobreescribirlos sin recompilar.
+    allowed-origins: ${APP_ALLOWED_ORIGINS:https://md-share-one.vercel.app,https://md-share-a-quiles-projects.vercel.app,http://localhost:4200}
   sync:
     # Cada cuanto persiste el scheduler en Supabase el estado en memoria de los documentos.
     persist-interval-ms: 5000
