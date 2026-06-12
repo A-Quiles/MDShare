@@ -5,8 +5,9 @@
  */
 export const environment = {
   production: true,
-  supabaseUrl: 'https://TU-PROJECT-REF.supabase.co',
-  supabaseAnonKey: 'TU_SUPABASE_ANON_KEY',
-  apiUrl: 'https://tu-backend.example.com/api',
-  wsUrl: 'https://tu-backend.example.com/ws-collaborative',
+  supabaseUrl: 'https://ikojdkwkqxflweosedua.supabase.co',
+  supabaseAnonKey:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlrb2pka3drcXhmbHdlb3NlZHVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNTE1MDIsImV4cCI6MjA5NjcyNzUwMn0.VilENgSx3cx0ONjbdXH-K93Qwf6rOahD5EjI1-BgiNs',
+  apiUrl: 'https://mdshare-1.onrender.com/api',
+  wsUrl: 'https://mdshare-1.onrender.com/ws-collaborative',
 } as const;
