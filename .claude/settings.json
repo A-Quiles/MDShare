@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} en %{time_total}s\\\\n\" --max-time 120 \"https://mdshare-1.onrender.com/api/documentos\" -H \"X-Usuario-Id: 7e85078e-ecaa-49ee-ad1e-d576deceeaec\" -H \"X-Usuario-Email: demo.mdshare@gmail.com\")",
+      "Bash(curl -s -i -o - --max-time 60 \"https://mdshare-1.onrender.com/api/documentos\" -H \"Origin: https://md-share-one.vercel.app\" -H \"X-Usuario-Id: 7e85078e-ecaa-49ee-ad1e-d576deceeaec\" -H \"X-Usuario-Email: demo.mdshare@gmail.com\")",
+      "Bash(curl -s --max-time 30 \"https://md-share-one.vercel.app/\")",
+      "Bash(curl -s -o /dev/null -w \"Ruta /login: HTTP %{http_code}\\\\n\" --max-time 30 \"https://md-share-one.vercel.app/login\")",
+      "Bash(curl -s -o /dev/null -w \"Preflight actual: HTTP %{http_code}\\\\n\" --max-time 60 -X OPTIONS \"https://mdshare-1.onrender.com/api/documentos\" -H \"Origin: https://md-share-one.vercel.app\" -H \"Access-Control-Request-Method: GET\" -H \"Access-Control-Request-Headers: x-usuario-id,x-usuario-email\")",
+      "Bash(curl -s -i --max-time 60 \"https://mdshare-1.onrender.com/api/documentos\" -H \"Origin: https://md-share-one.vercel.app\" -H \"X-Usuario-Id: 7e85078e-ecaa-49ee-ad1e-d576deceeaec\" -H \"X-Usuario-Email: demo.mdshare@gmail.com\")"
+    ]
+  }
+}
