@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mdshare-backend
+    runtime: java
+    buildCommand: cd back && mvn clean package -DskipTests
+    startCommand: java -jar back/target/collab-editor-backend-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SUPABASE_DB_URL
+        value: jdbc:postgresql://aws-0-eu-west-1.pooler.supabase.com:5432/postgres
+      - key: SUPABASE_DB_USER
+        value: postgres.ikojdkwkqxflweosedua
+      - key: SUPABASE_DB_PASSWORD
+        sync: false
+      - key: APP_ALLOWED_ORIGINS
+        value: http://localhost:4200
