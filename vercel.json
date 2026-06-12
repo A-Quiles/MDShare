@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd front && npm install",
+  "buildCommand": "cd front && npm run build",
+  "outputDirectory": "front/dist/mdshare-front/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

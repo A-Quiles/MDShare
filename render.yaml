@@ -12,4 +12,4 @@ services:
       - key: SUPABASE_DB_PASSWORD
         sync: false
       - key: APP_ALLOWED_ORIGINS
-        value: http://localhost:4200
+        value: https://md-share-one.vercel.app,https://md-share-a-quiles-projects.vercel.app,http://localhost:4200
