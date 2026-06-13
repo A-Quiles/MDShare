@@ -1,80 +1,24 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+
+import { MarkdownService } from '../../core/services/markdown.service';
 
 /**
- * Previsualizacion en vivo: convierte el Markdown a HTML con `marked` y lo
- * sanitiza con DOMPurify antes de inyectarlo (el contenido procede de otros
- * usuarios, asi que nunca se confia en el sin limpiar: prevencion de XSS).
+ * Previsualizacion en vivo del Markdown. La conversion y el saneado viven en
+ * MarkdownService (mismo pipeline que la exportacion); aqui solo se enlaza el
+ * resultado al DOM y se aporta el contenedor con scroll.
+ *
+ * El HTML se inyecta via [innerHTML], por lo que sus estilos no pueden ir en
+ * este componente (la encapsulacion de Angular no alcanza ese contenido): los
+ * publica MarkdownService como hoja global bajo la clase `.md`.
  */
 @Component({
   selector: 'app-markdown-preview',
-  template: '<div class="previsualizacion" [innerHTML]="html()"></div>',
+  template: '<div class="previsualizacion md" [innerHTML]="html()"></div>',
   styles: `
     .previsualizacion {
-      padding: 1.1rem 1.25rem;
+      padding: 1.25rem 1.4rem;
       font-size: 0.95rem;
-      line-height: 1.65;
-      color: var(--texto);
-
-      h1, h2, h3 {
-        color: var(--texto-titulo);
-      }
-
-      h1 {
-        border-bottom: 1px solid var(--borde);
-        padding-bottom: 0.35rem;
-      }
-
-      a {
-        color: var(--primario);
-      }
-
-      pre {
-        background: var(--codigo-fondo);
-        color: var(--codigo-texto);
-        padding: 0.85rem 1rem;
-        border-radius: 8px;
-        overflow-x: auto;
-      }
-
-      code {
-        font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-        font-size: 0.85em;
-      }
-
-      p > code,
-      li > code {
-        background: var(--superficie-2);
-        padding: 0.1rem 0.35rem;
-        border-radius: 4px;
-      }
-
-      blockquote {
-        border-left: 4px solid var(--primario);
-        margin-left: 0;
-        padding-left: 1rem;
-        color: var(--texto-suave);
-      }
-
-      table {
-        border-collapse: collapse;
-
-        th, td {
-          border: 1px solid var(--borde);
-          padding: 0.4rem 0.75rem;
-        }
-      }
-
-      img {
-        max-width: 100%;
-      }
-
-      hr {
-        border: none;
-        border-top: 1px solid var(--borde);
-      }
     }
   `,
 })
@@ -82,10 +26,9 @@ export class MarkdownPreviewComponent {
   readonly markdown = input<string>('');
 
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly markdownService = inject(MarkdownService);
 
-  protected readonly html = computed<SafeHtml>(() => {
-    const htmlCrudo = marked.parse(this.markdown(), { async: false });
-    const htmlSeguro = DOMPurify.sanitize(htmlCrudo);
-    return this.sanitizer.bypassSecurityTrustHtml(htmlSeguro);
-  });
+  protected readonly html = computed<SafeHtml>(() =>
+    this.sanitizer.bypassSecurityTrustHtml(this.markdownService.render(this.markdown())),
+  );
 }

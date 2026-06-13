@@ -1,14 +1,20 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+
+import { MarkdownService } from './markdown.service';
 
 /**
  * Exportacion del documento: descarga como .md / .html, exportacion a PDF
  * (mediante el dialogo de impresion del navegador sobre el HTML renderizado,
  * sin dependencias pesadas) y copia al portapapeles.
+ *
+ * El HTML se genera con el mismo MarkdownService que la previsualizacion, de
+ * modo que el documento exportado coincide con lo que el usuario ve en vivo.
  */
 @Injectable({ providedIn: 'root' })
 export class ExportacionService {
+  private readonly markdown = inject(MarkdownService);
+
   descargarMarkdown(titulo: string, contenido: string): void {
     this.descargar(
       new Blob([contenido], { type: 'text/markdown;charset=utf-8' }),
@@ -45,52 +51,44 @@ export class ExportacionService {
     }
   }
 
-  /** Markdown -> HTML sanitizado (mismo pipeline que la previsualizacion). */
-  private renderizar(markdown: string): string {
-    return DOMPurify.sanitize(marked.parse(markdown, { async: false }));
-  }
-
-  /** Documento HTML autocontenido, con estilos tipograficos embebidos. */
+  /** Documento HTML autocontenido, con los mismos estilos de la previsualizacion. */
   private documentoHtml(titulo: string, markdown: string, autoImprimir: boolean): string {
-    const cuerpo = this.renderizar(markdown);
+    const cuerpo = this.markdown.render(markdown);
     const tituloSeguro = DOMPurify.sanitize(titulo);
     const scriptImpresion = autoImprimir
       ? '<script>window.addEventListener("load", () => window.print());</script>'
       : '';
 
+    // Se redefinen los tokens de tema con una paleta clara: asi los estilos
+    // compartidos (this.markdown.estilos) producen un documento legible e
+    // independiente del tema activo en la app.
     return `<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${tituloSeguro}</title>
 <style>
+  :root {
+    --texto: #1f2328; --texto-titulo: #0f172a; --texto-suave: #59636e;
+    --borde: #d0d7de; --superficie-2: #f6f8fa; --primario: #0969da;
+    --codigo-fondo: #0f172a; --codigo-texto: #e6edf3;
+  }
   body {
-    max-width: 760px;
-    margin: 2.5rem auto;
-    padding: 0 1.5rem;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    color: #1e293b;
+    max-width: 820px; margin: 2.5rem auto; padding: 0 1.5rem;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 16px;
+    color: var(--texto);
   }
-  h1, h2, h3, h4 { color: #0f172a; line-height: 1.3; }
-  h1 { border-bottom: 2px solid #e2e8f0; padding-bottom: .4rem; }
-  pre {
-    background: #0f172a; color: #e2e8f0;
-    padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 13px;
+  ${this.markdown.estilos}
+  @media print {
+    body { margin: 0; max-width: none; }
+    .md pre, .md .md-tabla, .md blockquote, .md img { break-inside: avoid; }
   }
-  code { font-family: Consolas, 'Cascadia Code', monospace; }
-  p > code, li > code { background: #f1f5f9; padding: .1rem .35rem; border-radius: 4px; }
-  blockquote { border-left: 4px solid #2563eb; margin-left: 0; padding-left: 1rem; color: #475569; }
-  table { border-collapse: collapse; }
-  th, td { border: 1px solid #cbd5e1; padding: .4rem .75rem; }
-  img { max-width: 100%; }
-  @media print { body { margin: 0; max-width: none; } }
 </style>
 ${scriptImpresion}
 </head>
 <body>
-${cuerpo}
+<main class="md">${cuerpo}</main>
 </body>
 </html>`;
   }

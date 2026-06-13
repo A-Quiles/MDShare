@@ -123,11 +123,20 @@
 } @else {
   <main class="editor">
     <section class="editor__panel">
-      <h2>Markdown</h2>
+      <h2>
+        Markdown
+        <span class="editor__stats">
+          {{ estadisticas().palabras }} palabras · {{ estadisticas().caracteres }} caracteres
+          @if (estadisticas().minutosLectura) {
+            · {{ estadisticas().minutosLectura }} min lectura
+          }
+        </span>
+      </h2>
       <textarea
         #areaTexto
         [value]="contenido()"
         (input)="alEscribir($event)"
+        (keydown)="alTeclear($event)"
         spellcheck="false"
         placeholder="Escribe en Markdown… los cambios se sincronizan en vivo."
       ></textarea>

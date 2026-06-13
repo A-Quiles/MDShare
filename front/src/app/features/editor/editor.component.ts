@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
@@ -65,6 +66,18 @@ export class EditorComponent implements OnInit, OnDestroy {
   protected readonly contenido = signal('');
   protected readonly cargando = signal(true);
   protected readonly error = signal<string | null>(null);
+
+  /** Metricas en vivo del documento (palabras, caracteres y lectura estimada). */
+  protected readonly estadisticas = computed(() => {
+    const texto = this.contenido();
+    const palabras = texto.trim() ? (texto.trim().match(/\S+/g)?.length ?? 0) : 0;
+    return {
+      palabras,
+      caracteres: texto.length,
+      // ~200 palabras/minuto; minimo 1 min cuando hay texto.
+      minutosLectura: palabras ? Math.max(1, Math.round(palabras / 200)) : 0,
+    };
+  });
 
   protected readonly esPropietario = signal(false);
   protected readonly panelCompartirAbierto = signal(false);
@@ -132,6 +145,29 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.posicionCursor = textarea.selectionStart ?? 0;
     this.contenido.set(textarea.value);
     this.cambiosLocales$.next(textarea.value);
+  }
+
+  /**
+   * Tabular dentro del textarea inserta dos espacios en lugar de saltar el
+   * foco, comportamiento esperado al escribir codigo o listas anidadas.
+   */
+  protected alTeclear(evento: KeyboardEvent): void {
+    if (evento.key !== 'Tab' || evento.shiftKey) {
+      return;
+    }
+    evento.preventDefault();
+
+    const textarea = evento.target as HTMLTextAreaElement;
+    const inicio = textarea.selectionStart;
+    const fin = textarea.selectionEnd;
+    const valor = `${textarea.value.slice(0, inicio)}  ${textarea.value.slice(fin)}`;
+
+    textarea.value = valor;
+    textarea.setSelectionRange(inicio + 2, inicio + 2);
+
+    this.posicionCursor = inicio + 2;
+    this.contenido.set(valor);
+    this.cambiosLocales$.next(valor);
   }
 
   private cargarDocumento(): void {

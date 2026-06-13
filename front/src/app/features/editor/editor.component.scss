@@ -212,6 +212,13 @@
       border-bottom: 1px solid var(--borde);
     }
 
+    .editor__stats {
+      margin-left: 0.6rem;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
     textarea {
       flex: 1;
       border: none;
